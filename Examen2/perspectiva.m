@@ -4,41 +4,44 @@
 %% K - Constante de perspectiva (cercano a cero)
 %% IBand con bandera con indicador de valor (1-existe valor)
 
-function [ G, IBand ] = perspectiva( I, k )
-
-    G=0;
-    IBand=0;
-    %% Calcular nuevas cordenadas 
-    nCoord = zeros(size(I,1), size(I,2),2); %% x', y'
-    for i = 1:size(I,1) %%renglones -y
-        for j= 1:size(I,2) %%colimnas -x
-            nx=(i*j*k);
-            nCoord(i,j,1)=nx;
-            
-        end
-        
-    end
+function [G,Bandera] = perspectiva(I,k)
+    nCoord=zeros((size(I,1)),(size(I,2)));
     
-    %% Valido las decimales y negativos en las cordenadas
+    for i =1:size(I,1)
+        for j =1:size(I,2)
+            nX=j*(i*k);
+            nCoord(i,j)=nX; %%Estas mal aki compa :/
+        end
+    end 
+    
+    %%validar coordenadas
     nCoord=round(nCoord);
-    minX = min(min(nCoord(:,:)));
-    if(minX <= 0)
-        nCoord(:,:,1)=nCoord(:,:,1)+abs(minX)+1;
-    end
-    maxX=max(max(nCoord(:,:,1)));
+    minXs = min((nCoord(:)));
     
-    if(maxX<5000)
-         %% Asignar nuevas cordenadas
-        G=zeros(size(I,1),maxX,size(I,3));
-        for i = 1:size(I,1) %%renglones -y
-            for j= 1:size(I,2) %%colimnas -x
-                nX=nCoord(i,j);
-                G(i,nX,:)=I(i,j,:);
-                IBand(i,nX)=1;
-            end 
-        end
+    if (minXs<1)
+        nCoord(:,:)=nCoord(:,:)+abs(minXs)+1;
     end
-    G=uint8(G);
-    IBand=uint8(IBand);
-end
+    
+    %%Crear imagen resultante y guardar
+    maxXs = max((nCoord(:)));
+    maxYs = size(I,1);
+    
+    if(maxXs>10000) 
+        G=0;
+        Bandera=0;
+    else
+        G = zeros(maxYs, maxXs, size(I, 3));
+        Bandera = zeros(maxYs, maxXs);
 
+        for i =1:size(I,1)
+            for j =1:size(I,2)
+                G(i,nCoord(i,j),:)=I(i,j,:);
+                Bandera(i,nCoord(i,j))=1;
+            end
+        end 
+    end
+    
+    
+    G = uint8(G);
+    Bandera = uint8(Bandera);
+end

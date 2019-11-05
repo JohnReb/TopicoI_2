@@ -25,11 +25,11 @@ function [ G, IBand ] = transfCompuesta( I, AnIn, K , Kpe)
     
     maxX=max( max(nCoord(:,:,1)));
     maxY=max( max(nCoord(:,:,2)));
-    if minX <= 0
+    if minX < 0
         nCoord(:,:,1)=nCoord(:,:,1)+abs(minX)+1;
         
     end
-    if minY <= 0 
+    if minY < 0 
         nCoord(:,:,2) = nCoord(:,:,2)+abs(minY)+1;
     end
     
@@ -40,6 +40,7 @@ function [ G, IBand ] = transfCompuesta( I, AnIn, K , Kpe)
             for j=1:size(I,2) %% columnas
                 nx=nCoord(i,j,1);
                 ny=nCoord(i,j,2);
+                nx=round():;
                 G(ny,nx,:)=I(i,j,:);
                 IBand(ny,nx)=1;
             end

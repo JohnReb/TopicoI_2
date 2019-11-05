@@ -1,16 +1,20 @@
-function [ G, IBand ] = transfCompuesta( I, AnIn, K , Kpe)
+function [ G, IBand ] = transfCompuesta( I, AnIn, AnRo , Kpe)
     
     G = 0;
     IBand = 0;
     
-    cosIn = cosd(AnIn);
-    senIn = sind(AnIn);
+    cosIn = cosd(AnRo);
+    senIn = sind(AnRo);
     nCoord=zeros(size(I,1),size(I,2),2); %% X' , Y'
     
     for i=1:size(I,1) %% renglones
         for j=1:size(I,2) %% columnas
-            nx=(j*(cosIn+(senIn*K)))-(i*(senIn*(-1*(cosIn*K))));
-            ny=(j*senIn)+(i*cosIn);
+            tempx = (cosIn*AnIn)- senIn;
+            tempy = ((senIn*AnIn)+cosIn);
+            
+            nx = (i * cosIn) + (j* tempx);
+            ny=(i*senIn)+(j*tempy);
+            
             npx=nx*ny*Kpe;
             npy=ny;
             nCoord(i,j,1)=npx;

@@ -10,7 +10,7 @@ function [G,Bandera] = perspectiva(I,k)
     for i =1:size(I,1)
         for j =1:size(I,2)
             nX=j*(i*k);
-            nCoord(i,j)=nX; %%Estas mal aki compa :/
+            nCoord(i,j)=nX;
         end
     end 
     
